@@ -43,67 +43,67 @@ public class User
     {
         if (Id <= 0)
         {
-            return Result.Fail("Users.IsValid: Id is Invalid.");
+            return Result.Fail("Id is Invalid.");
         }
 
         if (OfficeId <= 0)
         {
-            return Result.Fail("Users.IsValid: OfficeId is Invalid.");
+            return Result.Fail("OfficeId is Invalid.");
         }
 
         if (RoleId <= 0)
         {
-            return Result.Fail("Users.IsValid: RoleId is Invalid.");
+            return Result.Fail("RoleId is Invalid.");
         }
 
         if (string.IsNullOrEmpty(Email))
         {
-            return Result.Fail("Users.IsValid: Null or empty Email.");
+            return Result.Fail("Null or empty Email.");
         }
 
         if (RegexValidation.EmailIsNotValid(Email))
         {
-            return Result.Fail("Users.IsValid: Email is Invalid.");
+            return Result.Fail("Email is Invalid.");
         }
 
         if (string.IsNullOrEmpty(Password))
         {
-            return Result.Fail("Users.IsValid: Null or empty Password.");
+            return Result.Fail("Null or empty Password.");
         }
 
         if (RegexValidation.PasswordIsNotStrong(Password))
         {
-            return Result.Fail("Users.IsValid: Password is not strong enough.");
+            return Result.Fail("Password is not strong enough.");
         }
 
         if (Password?.Length > 64)
         {
-            return Result.Fail("User.IsValid: MaxLength of Password is 64.");
+            return Result.Fail("MaxLength of Password is 64.");
         }
 
         if (string.IsNullOrEmpty(FirstName))
         {
-            return Result.Fail("Users.IsValid: Null or empty FirstName.");
+            return Result.Fail("Null or empty FirstName.");
         }
 
         if (FirstName?.Length > 50)
         {
-            return Result.Fail("User.IsValid: MaxLength of FirstName is 50.");
+            return Result.Fail("MaxLength of FirstName is 50.");
         }
 
         if (string.IsNullOrEmpty(LastName))
         {
-            return Result.Fail("Users.IsValid: Null or empty LastName.");
+            return Result.Fail("Null or empty LastName.");
         }
 
         if (LastName?.Length > 50)
         {
-            return Result.Fail("User.IsValid: MaxLength of LastName is 50.");
+            return Result.Fail("MaxLength of LastName is 50.");
         }
 
         if (RegexValidation.DateIsNotValid(Birthdate.ToString()) || Birthdate <= DateOnly.Parse(DateTime.UtcNow.ToString("d")))
         {
-            return Result.Fail("User.IsValid: Date is invalid.");
+            return Result.Fail("Date is invalid.");
         }
 
         return Result.Ok();

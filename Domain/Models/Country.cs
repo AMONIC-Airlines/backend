@@ -15,17 +15,17 @@ public class Country
     {
         if (Id <= 0)
         {
-            return Result.Fail("Countries.IsValid: Id is Invalid.");
+            return Result.Fail("Id is Invalid.");
         }
 
         if (string.IsNullOrEmpty(Name))
         {
-            return Result.Fail("Countries.IsValid: Null or empty Name.");
+            return Result.Fail("Null or empty Name.");
         }
 
         if (Name?.Length > 50)
         {
-            return Result.Fail("Countries.IsValid: MaxLength of Name is 50.");
+            return Result.Fail("MaxLength of Name is 50.");
         }
 
         return Result.Ok();

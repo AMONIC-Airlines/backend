@@ -28,42 +28,42 @@ public class Office
     {
         if (Id <= 0)
         {
-            return Result.Fail("Offices.IsValid: Id is Invalid.");
+            return Result.Fail("Id is Invalid.");
         }
 
         if (CountryId <= 0)
         {
-            return Result.Fail("Offices.IsValid: CountryId is Invalid.");
+            return Result.Fail("CountryId is Invalid.");
         }
 
         if (string.IsNullOrEmpty(Title))
         {
-            return Result.Fail("Offices.IsValid: Null or empty Title.");
+            return Result.Fail("Null or empty Title.");
         }
 
         if (Title?.Length > 50)
         {
-            return Result.Fail("Offices.IsValid: MaxLength of Title is 50.");
+            return Result.Fail("MaxLength of Title is 50.");
         }
 
         if (string.IsNullOrEmpty(Phone))
         {
-            return Result.Fail("Offices.IsValid: Null or empty Phone.");
+            return Result.Fail("Null or empty Phone.");
         }
 
         if(RegexValidation.PhoneIsNotValid(Phone))
         {
-            return Result.Fail("Offices.IsValid: Phone is Invalid.");
+            return Result.Fail("Phone is Invalid.");
         }
 
         if(string.IsNullOrEmpty(Contact))
         {
-            return Result.Fail("Offices.IsValid: Null or empty Contact.");
+            return Result.Fail("Null or empty Contact.");
         }
 
         if (Contact?.Length > 50)
         {
-            return Result.Fail("Offices.IsValid: MaxLength of Contact is 50.");
+            return Result.Fail("MaxLength of Contact is 50.");
         }
 
         return Result.Ok();

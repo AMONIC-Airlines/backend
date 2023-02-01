@@ -15,17 +15,17 @@ public class Role
     {
         if (Id <= 0)
         {
-            return Result.Fail("Roles.IsValid: Id is Invalid.");
+            return Result.Fail("Id is Invalid.");
         }
 
         if (string.IsNullOrEmpty(Title))
         {
-            return Result.Fail("Roles.IsValid: Null or empty Title.");
+            return Result.Fail("Null or empty Title.");
         }
 
         if (Title?.Length > 50)
         {
-            return Result.Fail("Roles.IsValid: MaxLength of Title is 50.");
+            return Result.Fail("MaxLength of Title is 50.");
         }
 
         return Result.Ok();

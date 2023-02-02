@@ -1,5 +1,5 @@
 ﻿using Domain.Models;
-using Database.Interfaces;
+using Domain.IRepositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace Database.Repositories;
@@ -59,6 +59,4 @@ public class RoleRepository : IRoleRepository
     {
         await _db.SaveChangesAsync();
     }
-
-
 }

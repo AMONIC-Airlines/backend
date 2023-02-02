@@ -1,8 +1,9 @@
 ﻿using Domain.Logic;
-using Domain.Logic.Repositories;
+using Domain.IRepositories;
 using Domain.Models;
 
 namespace Domain.UseCases;
+
 public class CountryService
 {
     private ICountryRepository _db;
@@ -74,7 +75,7 @@ public class CountryService
 
             return Result.Ok<Country>(success);
         }
-        catch(Exception)
+        catch (Exception)
         {
             return Result.Exception<Country>();
         }
@@ -93,5 +94,4 @@ public class CountryService
             return Result.Exception<List<Country>>();
         }
     }
-
 }

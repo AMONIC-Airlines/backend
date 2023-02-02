@@ -1,6 +1,7 @@
 ﻿using Domain.Models;
 
-namespace Database.Interfaces;
+namespace Domain.IRepositories;
+
 public interface IBaseRepository<T>
 {
     Task<T> Create(T Item);

@@ -1,15 +1,16 @@
 ﻿using Domain.Logic;
-using Domain.Logic.Repositories;
+using Domain.IRepositories;
 using Domain.Models;
 
 namespace Domain.UseCases;
+
 public class UserService
 {
     private IUserRepository _db;
 
     public UserService(IUserRepository db)
-    { 
-        _db = db; 
+    {
+        _db = db;
     }
 
     public async Task<Result<User>> GetUser(int id)
@@ -29,13 +30,12 @@ public class UserService
         {
             return Result.Exception<User>();
         }
-
     }
 
     public async Task<Result<User>> Registration(User user)
     {
         try
-        { 
+        {
             var item = await _db.GetByEmail(user.Email!);
 
             if (item is not null)
@@ -101,7 +101,7 @@ public class UserService
         {
             var success = await _db.Delete(id);
 
-            return Result.Ok<User>(success);  
+            return Result.Ok<User>(success);
         }
         catch (Exception)
         {
@@ -166,7 +166,7 @@ public class UserService
                 return Result.Fail<User>("User doesn't exist.");
             }
 
-            success.RoleId= roleId;
+            success.RoleId = roleId;
 
             var updated = await _db.Update(success!);
 
@@ -191,6 +191,4 @@ public class UserService
             return Result.Exception<List<User>>();
         }
     }
-
 }
-

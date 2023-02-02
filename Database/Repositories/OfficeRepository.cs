@@ -1,8 +1,9 @@
 ﻿using Domain.Models;
-using Database.Interfaces;
+using Domain.IRepositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace Database.Repositories;
+
 public class OfficeRepository : IOfficeRepository
 {
     private readonly ApplicationContext _db;
@@ -15,7 +16,7 @@ public class OfficeRepository : IOfficeRepository
     public async Task<Office> Create(Office office)
     {
         await _db.Offices.AddAsync(office);
-        
+
         await Save();
 
         return office;
@@ -73,5 +74,4 @@ public class OfficeRepository : IOfficeRepository
     {
         await _db.SaveChangesAsync();
     }
-
 }

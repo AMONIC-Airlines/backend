@@ -1,5 +1,5 @@
 ﻿using Domain.Models;
-using Database.Interfaces;
+using Domain.IRepositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace Database.Repositories;
@@ -16,7 +16,7 @@ public class UserRepository : IUserRepository
     public async Task<User> Create(User user)
     {
         await _db.Users.AddAsync(user);
-       
+
         await Save();
 
         return user;
@@ -67,7 +67,9 @@ public class UserRepository : IUserRepository
 
     public async Task<User?> GetByFirstName(string firstName)
     {
-        return await _db.Users.AsNoTracking().FirstOrDefaultAsync(x => x.FirstName.Equals(firstName));
+        return await _db.Users
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.FirstName.Equals(firstName));
     }
 
     public async Task<User?> GetByLastName(string lastName)
@@ -94,6 +96,4 @@ public class UserRepository : IUserRepository
     {
         await _db.SaveChangesAsync();
     }
-
-
 }

@@ -1,5 +1,5 @@
 ﻿using Domain.Logic;
-using Domain.Logic.Repositories;
+using Domain.IRepositories;
 using Domain.Models;
 
 namespace Domain.UseCases;

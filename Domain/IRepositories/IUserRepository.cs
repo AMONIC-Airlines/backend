@@ -1,8 +1,8 @@
 ﻿using Domain.Models;
 
-namespace Database.Interfaces;
+namespace Domain.IRepositories;
 
-public interface IUserRepository : IBaseRepository<User> 
+public interface IUserRepository : IBaseRepository<User>
 {
     Task<User?> GetByOfficeId(int OfficeId);
 
@@ -19,5 +19,4 @@ public interface IUserRepository : IBaseRepository<User>
     Task<User?> GetByActive(bool Active);
 
     Task<User?> GetByPassword(string Password);
-
- }
+}

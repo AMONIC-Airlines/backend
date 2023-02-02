@@ -1,9 +1,10 @@
 ﻿using Domain.Models;
-using Database.Interfaces;
+using Domain.IRepositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace Database.Repositories;
-public class CountryRepository : ICountryRepository 
+
+public class CountryRepository : ICountryRepository
 {
     private readonly ApplicationContext _db;
 
@@ -15,7 +16,7 @@ public class CountryRepository : ICountryRepository
     public async Task<Country> Create(Country country)
     {
         await _db.Countries.AddAsync(country);
-        
+
         await Save();
 
         return country;

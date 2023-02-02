@@ -1,5 +1,5 @@
 ﻿using Domain.Logic;
-using Domain.Logic.Repositories;
+using Domain.IRepositories;
 using Domain.Models;
 
 namespace Domain.UseCases;
@@ -26,7 +26,7 @@ public class RoleService
 
             return Result.Ok<Role>(success);
         }
-        catch (Exception) 
+        catch (Exception)
         {
             return Result.Exception<Role>();
         }
@@ -38,9 +38,9 @@ public class RoleService
         {
             var success = await _db.Delete(id);
 
-            return Result.Ok<Role>(success);   
+            return Result.Ok<Role>(success);
         }
-        catch (Exception) 
+        catch (Exception)
         {
             return Result.Exception<Role>();
         }
@@ -51,8 +51,8 @@ public class RoleService
         try
         {
             var success = await _db.Update(role);
-            
-            return Result.Ok<Role>(success);    
+
+            return Result.Ok<Role>(success);
         }
         catch (Exception)
         {
@@ -92,6 +92,25 @@ public class RoleService
         catch (Exception)
         {
             return Result.Exception<List<Role>>();
+        }
+    }
+
+    public async Task<Result<Role>> GetRoleByTitle(string title)
+    {
+        try
+        {
+            var success = await _db.GetByTitle(title);
+
+            if (success is null)
+            {
+                return Result.Fail<Role>("Role doesn't exist.");
+            }
+
+            return Result.Ok<Role>(success);
+        }
+        catch (Exception)
+        {
+            return Result.Exception<Role>();
         }
     }
 }

@@ -33,7 +33,7 @@ public class CountryRepository : ICountryRepository
 
     public async Task<Country> Delete(int id)
     {
-        var country = await _db.Countries.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+        var country = await _db.Countries.AsNoTracking().FirstAsync(x => x.Id == id);
 
         _db.Countries.Remove(country);
         await Save();

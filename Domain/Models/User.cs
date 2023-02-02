@@ -109,11 +109,6 @@ public class User
         return Result.Ok();
     }
 
-    public static string GenerateSalt()
-    {
-        return Convert.ToBase64String(RandomNumberGenerator.GetBytes(128 / 8));
-    }
-
     public static string GeneratePassword(string password)
     {
         MD5 md5 = new MD5CryptoServiceProvider();  

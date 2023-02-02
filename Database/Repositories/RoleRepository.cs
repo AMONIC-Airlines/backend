@@ -13,47 +13,51 @@ public class RoleRepository : IRoleRepository
         _db = db;
     }
 
-    public async Task<bool> Create(Role role)
+    public async Task<Role> Create(Role role)
     {
-        if (_db.Roles != null)
-        {
-            await _db.Roles.AddAsync(role);
-        }
+        await _db.Roles.AddAsync(role);
 
-        await _db.SaveChangesAsync();
+        await Save();
 
-        return true;
+        return role;
     }
 
-    public async Task<Role> Get(int id)
+    public async Task<Role?> Get(int id)
     {
-        return await _db.Roles.FirstOrDefaultAsync(x => x.Id == id);
+        return await _db.Roles.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
     }
 
-    public async Task<List<Role>> Select()
+    public async Task<List<Role>> GetAll()
     {
         return await _db.Roles.ToListAsync();
     }
 
-    public async Task<bool> Delete(Role role)
+    public async Task<Role> Delete(int id)
     {
-        _db.Roles.Remove(role);
-        await _db.SaveChangesAsync();
+        var role = await _db.Roles.AsNoTracking().FirstAsync(x => x.Id == id);
 
-        return true;
+        _db.Roles.Remove(role);
+        await Save();
+
+        return role;
     }
 
     public async Task<Role> Update(Role role)
     {
         _db.Roles.Update(role);
-        await _db.SaveChangesAsync();
+        await Save();
 
         return role;
     }
 
-    public async Task<Role> GetByTitle(string title)
+    public async Task<Role?> GetByTitle(string title)
     {
-        return await _db.Roles.FirstOrDefaultAsync(x => x.Title == title);
+        return await _db.Roles.AsNoTracking().FirstOrDefaultAsync(x => x.Title == title);
+    }
+
+    public async Task Save()
+    {
+        await _db.SaveChangesAsync();
     }
 
 

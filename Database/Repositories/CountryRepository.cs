@@ -12,45 +12,50 @@ public class CountryRepository : ICountryRepository
         _db = db;
     }
 
-    public async Task<bool> Create(Country country)
+    public async Task<Country> Create(Country country)
     {
-        if (_db.Countries != null)
-        {
-            await _db.Countries.AddAsync(country);
-        }
-        await _db.SaveChangesAsync();
+        await _db.Countries.AddAsync(country);
+        
+        await Save();
 
-        return true;
+        return country;
     }
 
-    public async Task<Country> Get(int id)
+    public async Task<Country?> Get(int id)
     {
-        return await _db.Countries.FirstOrDefaultAsync(x => x.Id == id);
+        return await _db.Countries.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
     }
 
-    public async Task<List<Country>> Select()
+    public async Task<List<Country>> GetAll()
     {
         return await _db.Countries.ToListAsync();
     }
 
-    public async Task<bool> Delete(Country country)
+    public async Task<Country> Delete(int id)
     {
-        _db.Countries.Remove(country);
-        await _db.SaveChangesAsync();
+        var country = await _db.Countries.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
 
-        return true;
+        _db.Countries.Remove(country);
+        await Save();
+
+        return country;
     }
 
     public async Task<Country> Update(Country country)
     {
         _db.Countries.Update(country);
-        await _db.SaveChangesAsync();
+        await Save();
 
         return country;
     }
 
-    public async Task<Country> GetByName(string name)
+    public async Task<Country?> GetByName(string name)
     {
         return await _db.Countries.FirstOrDefaultAsync(x => x.Name == name);
+    }
+
+    public async Task Save()
+    {
+        await _db.SaveChangesAsync();
     }
 }

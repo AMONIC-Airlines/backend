@@ -13,90 +13,86 @@ public class UserRepository : IUserRepository
         _db = db;
     }
 
-    public async Task<bool> Create(User user)
+    public async Task<User> Create(User user)
     {
-        if (_db.Users != null)
-        {
-            await _db.Users.AddAsync(user);
-        }
+        await _db.Users.AddAsync(user);
+       
+        await Save();
 
-        await _db.SaveChangesAsync();
-
-        return true;
+        return user;
     }
 
-    public async Task<User> Get(int Id)
+    public async Task<User?> Get(int Id)
     {
-        return await _db.Users.FirstOrDefaultAsync(x => x.Id == Id);
+        return await _db.Users.AsNoTracking().FirstOrDefaultAsync(x => x.Id == Id);
     }
 
-    public async Task<List<User>> Select()
+    public async Task<List<User>> GetAll()
     {
         return await _db.Users.ToListAsync();
     }
 
-    public async Task<bool> Delete(User user)
+    public async Task<User> Delete(int id)
     {
-        _db.Users.Remove(user);
-        await _db.SaveChangesAsync();
+        var user = await _db.Users.AsNoTracking().FirstAsync(x => x.Id == id);
 
-        return true;
+        _db.Users.Remove(user);
+        await Save();
+
+        return user;
     }
 
     public async Task<User> Update(User user)
     {
         _db.Users.Update(user);
-        await _db.SaveChangesAsync();
+        await Save();
 
         return user;
     }
 
-    public async Task<User> GetByOfficeId(int officeId)
+    public async Task<User?> GetByOfficeId(int officeId)
     {
-        return await _db.Users.FirstOrDefaultAsync(x => x.OfficeId == officeId);
+        return await _db.Users.AsNoTracking().FirstOrDefaultAsync(x => x.OfficeId == officeId);
     }
 
-    public async Task<User> GetByRoleId(int roleId)
+    public async Task<User?> GetByRoleId(int roleId)
     {
-        return await _db.Users.FirstOrDefaultAsync(x => x.RoleId == roleId);
+        return await _db.Users.AsNoTracking().FirstOrDefaultAsync(x => x.RoleId == roleId);
     }
 
-    public async Task<User> GetByEmail(string email)
+    public async Task<User?> GetByEmail(string email)
     {
-        return await _db.Users.FirstOrDefaultAsync(x => x.Email.Equals(email));
+        return await _db.Users.AsNoTracking().FirstOrDefaultAsync(x => x.Email.Equals(email));
     }
 
-    public async Task<User> GetByFirstName(string firstName)
+    public async Task<User?> GetByFirstName(string firstName)
     {
-        return await _db.Users.FirstOrDefaultAsync(x => x.FirstName.Equals(firstName));
+        return await _db.Users.AsNoTracking().FirstOrDefaultAsync(x => x.FirstName.Equals(firstName));
     }
 
-    public async Task<User> GetByLastName(string lastName)
+    public async Task<User?> GetByLastName(string lastName)
     {
-        return await _db.Users.FirstOrDefaultAsync(x => x.LastName.Equals(lastName));
+        return await _db.Users.AsNoTracking().FirstOrDefaultAsync(x => x.LastName.Equals(lastName));
     }
 
-    public async Task<User> GetByBirthdate(DateOnly birthdate)
+    public async Task<User?> GetByBirthdate(DateOnly birthdate)
     {
-        return await _db.Users.FirstOrDefaultAsync(x => x.Birthdate == birthdate);
+        return await _db.Users.AsNoTracking().FirstOrDefaultAsync(x => x.Birthdate == birthdate);
     }
 
-    public async Task<User> GetByActive(bool active)
+    public async Task<User?> GetByActive(bool active)
     {
-        return await _db.Users.FirstOrDefaultAsync(x => x.Active == active);
+        return await _db.Users.AsNoTracking().FirstOrDefaultAsync(x => x.Active == active);
     }
 
-    public async Task<User> GetByPassword(string password)
+    public async Task<User?> GetByPassword(string password)
     {
-        return await _db.Users.FirstOrDefaultAsync(x => x.Password == password);
+        return await _db.Users.AsNoTracking().FirstOrDefaultAsync(x => x.Password == password);
     }
 
-    public async Task<bool> GetByEmailAndPassword(string email, string password)
+    public async Task Save()
     {
-        var emailResult = await _db.Users.FirstOrDefaultAsync(x => x.Email == email);
-        var passwordResult = await _db.Users.FirstOrDefaultAsync(x => x.Password == password);
-
-        return emailResult != null && passwordResult != null;
+        await _db.SaveChangesAsync();
     }
 
 

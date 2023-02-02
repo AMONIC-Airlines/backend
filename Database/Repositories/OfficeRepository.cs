@@ -12,61 +12,66 @@ public class OfficeRepository : IOfficeRepository
         _db = db;
     }
 
-    public async Task<bool> Create(Office office)
+    public async Task<Office> Create(Office office)
     {
-        if (_db.Offices != null)
-        {
-            await _db.Offices.AddAsync(office);
-        }
-        await _db.SaveChangesAsync();
+        await _db.Offices.AddAsync(office);
+        
+        await Save();
 
-        return true;
+        return office;
     }
 
-    public async Task<Office> Get(int id)
+    public async Task<Office?> Get(int id)
     {
         return await _db.Offices.FirstOrDefaultAsync(x => x.Id == id);
     }
 
-    public async Task<List<Office>> Select()
+    public async Task<List<Office>> GetAll()
     {
         return await _db.Offices.ToListAsync();
     }
 
-    public async Task<bool> Delete(Office office)
+    public async Task<Office> Delete(int id)
     {
-        _db.Offices.Remove(office);
-        await _db.SaveChangesAsync();
+        var office = await _db.Offices.AsNoTracking().FirstAsync(x => x.Id == id);
 
-        return true;
+        _db.Offices.Remove(office);
+        await Save();
+
+        return office;
     }
 
     public async Task<Office> Update(Office office)
     {
         _db.Offices.Update(office);
-        await _db.SaveChangesAsync();
+        await Save();
 
         return office;
     }
 
-    public async Task<Office> GetByCountryId(int id)
+    public async Task<Office?> GetByCountryId(int id)
     {
-        return await _db.Offices.FirstOrDefaultAsync(x => x.CountryId == id);
+        return await _db.Offices.AsNoTracking().FirstOrDefaultAsync(x => x.CountryId == id);
     }
 
-    public async Task<Office> GetByTitle(string title)
+    public async Task<Office?> GetByTitle(string title)
     {
-        return await _db.Offices.FirstOrDefaultAsync(x => x.Title == title);
+        return await _db.Offices.AsNoTracking().FirstOrDefaultAsync(x => x.Title == title);
     }
 
-    public async Task<Office> GetByPhone(string phone)
+    public async Task<Office?> GetByPhone(string phone)
     {
-        return await _db.Offices.FirstOrDefaultAsync(x => x.Phone == phone);
+        return await _db.Offices.AsNoTracking().FirstOrDefaultAsync(x => x.Phone == phone);
     }
 
-    public async Task<Office> GetByContact(string contact)
+    public async Task<Office?> GetByContact(string contact)
     {
-        return await _db.Offices.FirstOrDefaultAsync(x => x.Contact == contact);
+        return await _db.Offices.AsNoTracking().FirstOrDefaultAsync(x => x.Contact == contact);
+    }
+
+    public async Task Save()
+    {
+        await _db.SaveChangesAsync();
     }
 
 }

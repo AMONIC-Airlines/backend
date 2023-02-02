@@ -4,22 +4,20 @@ namespace Database.Interfaces;
 
 public interface IUserRepository : IBaseRepository<User> 
 {
-    Task<User> GetByOfficeId(int OfficeId);
+    Task<User?> GetByOfficeId(int OfficeId);
 
-    Task<User> GetByRoleId(int RoleId);
+    Task<User?> GetByRoleId(int RoleId);
 
-    Task<User> GetByEmail(string Email);
+    Task<User?> GetByEmail(string Email);
 
-    Task<User> GetByFirstName(string FirstName);
+    Task<User?> GetByFirstName(string FirstName);
 
-    Task<User> GetByLastName(string LastName);
+    Task<User?> GetByLastName(string LastName);
 
-    Task<User> GetByBirthdate(DateOnly Birthdate);
+    Task<User?> GetByBirthdate(DateOnly Birthdate);
 
-    Task<User> GetByActive(bool Active);
+    Task<User?> GetByActive(bool Active);
 
-    Task<User> GetByPassword(string Password);
-
-    Task<bool> GetByEmailAndPassword(string Email, string Password);
+    Task<User?> GetByPassword(string Password);
 
  }

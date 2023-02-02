@@ -25,9 +25,9 @@ public class UserService
 
             return Result.Ok<User>(success);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return Result.Fail<User>("UserService.GetUser: " + ex.Message);
+            return Result.Exception<User>("Failed to get user");
         }
 
     }
@@ -49,9 +49,9 @@ public class UserService
 
             return Result.Ok<User>(success);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return Result.Fail<User>("UserService.Registration: " + ex.Message);
+            return Result.Exception<User>("Failed to register");
         }
     }
 
@@ -75,9 +75,9 @@ public class UserService
 
             return Result.Ok<User>(success);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return Result.Fail<User>("UserService.Authorization: " + ex.Message);
+            return Result.Exception<User>("Failed to pass authorization");
         }
     }
 
@@ -91,7 +91,7 @@ public class UserService
         }
         catch (Exception ex)
         {
-            return Result.Fail<User>("UserService.UpdateUser: " + ex.Message);
+            return Result.Exception<User>("Failed to update user");
         }
     }
 
@@ -105,7 +105,7 @@ public class UserService
         }
         catch (Exception ex)
         {
-            return Result.Fail<User>("UserService.DeleteUser: " + ex.Message);
+            return Result.Exception<User>("Failed to delete user");
         }
     }
 
@@ -128,7 +128,7 @@ public class UserService
         }
         catch (Exception ex)
         {
-            return Result.Fail<User>("UserService.ActivateUser: " + ex.Message);
+            return Result.Exception<User>("Failed to activate user");
         }
     }
 
@@ -151,7 +151,7 @@ public class UserService
         }
         catch (Exception ex)
         {
-            return Result.Fail<User>("UserService.DeactivateUser: " + ex.Message);
+            return Result.Exception<User>("Failed to deactivate user");
         }
     }
 
@@ -174,7 +174,7 @@ public class UserService
         }
         catch (Exception ex)
         {
-            return Result.Fail<User>("UserService.ChangeRole: " + ex.Message);
+            return Result.Exception<User>("Failed to change user's role");
         }
     }
 
@@ -188,7 +188,7 @@ public class UserService
         }
         catch (Exception ex)
         {
-            return Result.Fail<List<User>>("UserService.GetAllUsers: " + ex.Message);
+            return Result.Exception<List<User>>("Failed to get all users");
         }
     }
 

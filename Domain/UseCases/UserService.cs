@@ -27,7 +27,7 @@ public class UserService
         }
         catch (Exception)
         {
-            return Result.Exception<User>("Failed to get user");
+            return Result.Exception<User>();
         }
 
     }
@@ -51,7 +51,7 @@ public class UserService
         }
         catch (Exception)
         {
-            return Result.Exception<User>("Failed to register");
+            return Result.Exception<User>();
         }
     }
 
@@ -77,7 +77,7 @@ public class UserService
         }
         catch (Exception)
         {
-            return Result.Exception<User>("Failed to pass authorization");
+            return Result.Exception<User>();
         }
     }
 
@@ -89,9 +89,9 @@ public class UserService
 
             return Result.Ok<User>(success);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return Result.Exception<User>("Failed to update user");
+            return Result.Exception<User>();
         }
     }
 
@@ -103,9 +103,9 @@ public class UserService
 
             return Result.Ok<User>(success);  
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return Result.Exception<User>("Failed to delete user");
+            return Result.Exception<User>();
         }
     }
 
@@ -126,9 +126,9 @@ public class UserService
 
             return Result.Ok<User>(updated);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return Result.Exception<User>("Failed to activate user");
+            return Result.Exception<User>();
         }
     }
 
@@ -149,9 +149,9 @@ public class UserService
 
             return Result.Ok<User>(updated);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return Result.Exception<User>("Failed to deactivate user");
+            return Result.Exception<User>();
         }
     }
 
@@ -172,9 +172,9 @@ public class UserService
 
             return Result.Ok<User>(updated);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return Result.Exception<User>("Failed to change user's role");
+            return Result.Exception<User>();
         }
     }
 
@@ -186,9 +186,9 @@ public class UserService
 
             return Result.Ok<List<User>>(success);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return Result.Exception<List<User>>("Failed to get all users");
+            return Result.Exception<List<User>>();
         }
     }
 

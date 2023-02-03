@@ -50,9 +50,17 @@ builder.Services
 
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<IRoleRepository, RoleRepository>();
+builder.Services.AddTransient<IScheduleRepository, ScheduleRepository>();
+builder.Services.AddTransient<IRouteRepository, RouteRepository>();
+builder.Services.AddTransient<IAirportRepository, AirportRepository>();
+builder.Services.AddTransient<IAircraftRepository, AircraftRepository>();
 
 builder.Services.AddTransient<UserService>();
 builder.Services.AddTransient<RoleService>();
+builder.Services.AddTransient<ScheduleService>();
+builder.Services.AddTransient<RouteService>();
+builder.Services.AddTransient<AirportService>();
+builder.Services.AddTransient<AircraftService>();
 
 builder.Services.AddControllers();
 

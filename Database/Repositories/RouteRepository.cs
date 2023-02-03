@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography.X509Certificates;
 
 namespace Database.Repositories;
+
 public class RouteRepository : IRouteRepository
 {
     private readonly ApplicationContext _db;
@@ -52,7 +53,10 @@ public class RouteRepository : IRouteRepository
 
     public async Task<List<Route>> GetByDepartureAndArrivalAirportId(int departureId, int arrivalId)
     {
-        return await _db.Routes.Where(x => x.DepartureAirportId == departureId && x.ArrivalAirportId == arrivalId).ToListAsync();
+        return await _db.Routes
+            .AsNoTracking()
+            .Where(x => x.DepartureAirportId == departureId && x.ArrivalAirportId == arrivalId)
+            .ToListAsync();
     }
 
     public async Task Save()

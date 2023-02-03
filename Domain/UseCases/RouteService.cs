@@ -3,6 +3,7 @@ using Domain.Logic;
 using Database.Models;
 
 namespace Domain.UseCases;
+
 public class RouteService
 {
     private IRouteRepository _db;
@@ -94,7 +95,10 @@ public class RouteService
         }
     }
 
-    public async Task<Result<List<Route>>> GetByDepartureAndArrivalAirportId(int departureId, int arrivalId)
+    public async Task<Result<List<Route>>> GetByDepartureAndArrivalAirportId(
+        int departureId,
+        int arrivalId
+    )
     {
         try
         {
@@ -102,10 +106,9 @@ public class RouteService
 
             return Result.Ok<List<Route>>(success);
         }
-        catch (Exception) 
-        { 
+        catch (Exception)
+        {
             return Result.Exception<List<Route>>();
         }
     }
-
 }

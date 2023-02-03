@@ -3,6 +3,7 @@ using Domain.Logic;
 using Database.Models;
 
 namespace Domain.UseCases;
+
 public class AirportService
 {
     private IAirportRepository _db;
@@ -93,5 +94,4 @@ public class AirportService
             return Result.Exception<List<Airport>>();
         }
     }
-
 }

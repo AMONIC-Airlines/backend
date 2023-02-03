@@ -52,12 +52,14 @@ public class ScheduleRepository : IScheduleRepository
 
     public async Task<List<Schedule>> GetByDate(DateOnly date)
     {
-        return await _db.Schedules.Where(x => x.Date == date).OrderBy(x => x.Date).ThenBy(x => x.Time).ThenBy(x => x.EconomyPrice).ThenBy(x => x.Confirmed).ToListAsync();
-    }
-
-    public async Task<List<Schedule>> GetByFlightNumber(string flightNumber)
-    {
-        return await _db.Schedules.Where(x => x.FlightNumber == flightNumber).OrderBy(x => x.Date).ThenBy(x => x.Time).ThenBy(x => x.EconomyPrice).ThenBy(x => x.Confirmed).ToListAsync();   
+        return await _db.Schedules
+            .OrderBy(x => x.Date)
+            .ThenBy(x => x.Time)
+            .ThenBy(x => x.EconomyPrice)
+            .ThenBy(x => x.Confirmed)
+            .AsNoTracking()
+            .Where(x => x.Date == date)
+            .ToListAsync();
     }
 
     public async Task Save()

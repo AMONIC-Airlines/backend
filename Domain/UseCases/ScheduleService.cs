@@ -3,6 +3,7 @@ using Domain.Logic;
 using Database.Models;
 
 namespace Domain.UseCases;
+
 public class ScheduleService
 {
     private IScheduleRepository _db;
@@ -145,20 +146,6 @@ public class ScheduleService
         try
         {
             var success = await _db.GetByDate(date);
-
-            return Result.Ok<List<Schedule>>(success);
-        }
-        catch (Exception)
-        {
-            return Result.Exception<List<Schedule>>();
-        }
-    }
-
-    public async Task<Result<List<Schedule>>> GetByFlightNumber(string flightNumber)
-    {
-        try
-        {
-            var success = await _db.GetByFlightNumber(flightNumber);
 
             return Result.Ok<List<Schedule>>(success);
         }

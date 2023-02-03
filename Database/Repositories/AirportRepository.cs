@@ -3,7 +3,8 @@ using Database.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace Database.Repositories;
-public class AirportRepository : IBaseRepository<Airport>
+
+public class AirportRepository : IAirportRepository
 {
     private readonly ApplicationContext _db;
 
@@ -52,5 +53,10 @@ public class AirportRepository : IBaseRepository<Airport>
     public async Task Save()
     {
         await _db.SaveChangesAsync();
+    }
+
+    public async Task<Airport?> GetByName(string name)
+    {
+        return await _db.Airports.FirstOrDefaultAsync(x => x.Name == name);
     }
 }

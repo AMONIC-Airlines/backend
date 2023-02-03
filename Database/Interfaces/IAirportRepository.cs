@@ -4,6 +4,5 @@ namespace Domain.IRepositories;
 
 public interface IAirportRepository : IBaseRepository<Airport>
 {
-    Task<List<Airport>> GetByName();
+    Task<Airport?> GetByName(string name);
 }
-

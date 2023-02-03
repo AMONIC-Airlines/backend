@@ -1,5 +1,5 @@
-﻿using Domain.Models;
-using Domain.IRepositories;
+﻿using Database.Models;
+using Database.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace Database.Repositories;

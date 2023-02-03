@@ -1,6 +1,4 @@
-﻿using Domain.Models;
-
-namespace Domain.IRepositories;
+﻿namespace Database.Interfaces;
 
 public interface IBaseRepository<T>
 {

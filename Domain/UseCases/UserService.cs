@@ -1,6 +1,6 @@
 ﻿using Domain.Logic;
-using Domain.IRepositories;
-using Domain.Models;
+using Database.Interfaces;
+using Database.Models;
 
 namespace Domain.UseCases;
 
@@ -43,7 +43,7 @@ public class UserService
                 return Result.Fail<User>("Email is already taken.");
             }
 
-            user.Password = User.GeneratePassword(user.Password!);
+            user.Password = PasswordGenerator.GeneratePassword(user.Password!);
 
             var success = await _db.Create(user);
 
@@ -66,7 +66,7 @@ public class UserService
                 return Result.Fail<User>("User doesn't exist.");
             }
 
-            var generatedPassword = User.GeneratePassword(password);
+            var generatedPassword = PasswordGenerator.GeneratePassword(password);
 
             if (success.Password != generatedPassword)
             {

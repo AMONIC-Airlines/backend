@@ -1,6 +1,6 @@
 ﻿using Domain.Logic;
-using Domain.IRepositories;
-using Domain.Models;
+using Database.Interfaces;
+using Database.Models;
 
 namespace Domain.UseCases;
 

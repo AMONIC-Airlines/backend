@@ -1,11 +1,15 @@
 ﻿using System.Text.RegularExpressions;
 
 namespace Domain.Logic;
+
 public class RegexValidation
 {
     public static bool PhoneIsValid(string Phone)
     {
-        Regex validatePhoneNumberRegex = new("^\\+?\\d{1,4}?[-.\\s]?\\(?\\d{1,3}?\\)?[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,9}$");
+        Regex validatePhoneNumberRegex =
+            new(
+                "^\\+?\\d{1,4}?[-.\\s]?\\(?\\d{1,3}?\\)?[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,9}$"
+            );
         return validatePhoneNumberRegex.IsMatch(Phone);
     }
 
@@ -16,7 +20,10 @@ public class RegexValidation
 
     public static bool EmailIsValid(string Email)
     {
-        Regex validateEmailRegex = new ("^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$");
+        Regex validateEmailRegex =
+            new(
+                "^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$"
+            );
         return validateEmailRegex.IsMatch(Email);
     }
 
@@ -27,7 +34,8 @@ public class RegexValidation
 
     public static bool PasswordIsStrong(string Password)
     {
-        Regex validateGuidRegex = new("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$");
+        Regex validateGuidRegex =
+            new("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$");
         return validateGuidRegex.IsMatch(Password);
     }
 

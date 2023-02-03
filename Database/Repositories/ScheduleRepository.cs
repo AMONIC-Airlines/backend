@@ -52,7 +52,7 @@ public class ScheduleRepository : IScheduleRepository
 
     public async Task<Schedule?> GetByDateAndFlightNumber(DateOnly date, string flightNumber)
     {
-        return await _db.Schedules.OrderBy(x => x.Date).OrderBy(x => x.Time).OrderBy(x => x.EconomyPrice).OrderBy(x => x.Confirmed).AsNoTracking().FirstOrDefaultAsync(x => x.Date == date && x.FlightNumber == flightNumber);
+        return await _db.Schedules.OrderBy(x => x.Date).ThenBy(x => x.Time).ThenBy(x => x.EconomyPrice).ThenBy(x => x.Confirmed).AsNoTracking().FirstOrDefaultAsync(x => x.Date == date && x.FlightNumber == flightNumber);
     }
 
     public async Task Save()

@@ -69,7 +69,7 @@ public class UserRepository : IUserRepository
     {
         return await _db.Users
             .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.FirstName.Equals(firstName));
+            .FirstOrDefaultAsync(x => x.FirstName!.Equals(firstName));
     }
 
     public async Task<User?> GetByLastName(string lastName)

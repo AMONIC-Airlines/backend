@@ -1,7 +1,6 @@
 ﻿using Database.Models;
 using Database.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Cryptography.X509Certificates;
 
 namespace Database.Repositories;
 

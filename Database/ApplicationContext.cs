@@ -31,6 +31,8 @@ public partial class ApplicationContext : DbContext
 
     public virtual DbSet<User> Users { get; set; }
 
+    public virtual DbSet<AvailableSpace> AvailableSpaces { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.UseCollation("utf8mb4_unicode_ci").HasCharSet("utf8mb4");

@@ -15,6 +15,13 @@ public class ScheduleRepository : IScheduleRepository
 
     public async Task<Schedule> Create(Schedule schedule)
     {
+        AvailableSpace availableSpace = new AvailableSpace();
+        availableSpace.ScheduleId = schedule.Id;
+
+        await _db.AvailableSpaces.AddAsync(availableSpace);
+
+        await Save();
+
         await _db.Schedules.AddAsync(schedule);
 
         await Save();

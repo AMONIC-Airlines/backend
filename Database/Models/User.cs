@@ -23,4 +23,6 @@ public partial class User
     public virtual Office? Office { get; set; }
 
     public virtual Role Role { get; set; } = null!;
+
+    public virtual ICollection<Ticket> Tickets { get; } = new List<Ticket>();
 }

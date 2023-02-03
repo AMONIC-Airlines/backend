@@ -18,4 +18,9 @@
     <ProjectReference Include="../Database/Database.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="../Domain/Domain.csproj" />
+    <ProjectReference Include="../Database/Database.csproj" />
+  </ItemGroup>
+
 </Project>

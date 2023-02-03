@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 
 namespace Domain.Logic;
+
 public class BookingReferenceGeneration
 {
     public static string GenerateBookingReference()

@@ -1,11 +1,15 @@
 ﻿using Database.Models;
 using Database.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace Database.Repositories;
 
 public class ScheduleRepository : IScheduleRepository
 {
+
+    public static Dictionary<int, int> occupiedPlaces = new Dictionary<int, int>();
+
     private readonly ApplicationContext _db;
 
     public ScheduleRepository(ApplicationContext db)
@@ -15,6 +19,8 @@ public class ScheduleRepository : IScheduleRepository
 
     public async Task<Schedule> Create(Schedule schedule)
     {
+        occupiedPlaces[schedule.Id] = 0;
+
         await _db.Schedules.AddAsync(schedule);
 
         await Save();

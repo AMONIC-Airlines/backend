@@ -15,6 +15,8 @@ public partial class ApplicationContext : DbContext
 
     public virtual DbSet<Airport> Airports { get; set; }
 
+    public virtual DbSet<Cabintype> Cabintypes { get; set; }
+
     public virtual DbSet<Country> Countries { get; set; }
 
     public virtual DbSet<Office> Offices { get; set; }
@@ -24,6 +26,8 @@ public partial class ApplicationContext : DbContext
     public virtual DbSet<Route> Routes { get; set; }
 
     public virtual DbSet<Schedule> Schedules { get; set; }
+
+    public virtual DbSet<Ticket> Tickets { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
 
@@ -64,6 +68,16 @@ public partial class ApplicationContext : DbContext
                 .HasForeignKey(d => d.CountryId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_AirPort_Country");
+        });
+
+        modelBuilder.Entity<Cabintype>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("cabintypes").HasCharSet("utf8mb3").UseCollation("utf8mb3_bin");
+
+            entity.Property(e => e.Id).HasColumnType("int(11)").HasColumnName("ID");
+            entity.Property(e => e.Name).HasMaxLength(50);
         });
 
         modelBuilder.Entity<Country>(entity =>
@@ -174,6 +188,58 @@ public partial class ApplicationContext : DbContext
                 .HasForeignKey(d => d.RouteId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Schedule_Routes");
+        });
+
+        modelBuilder.Entity<Ticket>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("tickets").HasCharSet("utf8mb3").UseCollation("utf8mb3_bin");
+
+            entity.HasIndex(e => e.ScheduleId, "FK_Ticket_Schedule");
+
+            entity.HasIndex(e => e.CabinTypeId, "FK_Ticket_TravelClass");
+
+            entity.HasIndex(e => e.UserId, "FK_Ticket_User");
+
+            entity.Property(e => e.Id).HasColumnType("int(11)").HasColumnName("ID");
+            entity.Property(e => e.BookingReference).HasMaxLength(6);
+            entity
+                .Property(e => e.CabinTypeId)
+                .HasColumnType("int(11)")
+                .HasColumnName("CabinTypeID");
+            entity.Property(e => e.Email).HasMaxLength(50);
+            entity.Property(e => e.Firstname).HasMaxLength(50);
+            entity.Property(e => e.Lastname).HasMaxLength(50);
+            entity
+                .Property(e => e.PassportCountryId)
+                .HasColumnType("int(11)")
+                .HasColumnName("PassportCountryID");
+            entity.Property(e => e.PassportNumber).HasMaxLength(9);
+            entity.Property(e => e.Phone).HasMaxLength(14);
+            entity.Property(e => e.ScheduleId).HasColumnType("int(11)").HasColumnName("ScheduleID");
+            entity.Property(e => e.UserId).HasColumnType("int(11)").HasColumnName("UserID");
+
+            entity
+                .HasOne(d => d.CabinType)
+                .WithMany(p => p.Tickets)
+                .HasForeignKey(d => d.CabinTypeId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Ticket_TravelClass");
+
+            entity
+                .HasOne(d => d.Schedule)
+                .WithMany(p => p.Tickets)
+                .HasForeignKey(d => d.ScheduleId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Ticket_Schedule");
+
+            entity
+                .HasOne(d => d.User)
+                .WithMany(p => p.Tickets)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Ticket_User");
         });
 
         modelBuilder.Entity<User>(entity =>

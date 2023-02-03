@@ -21,4 +21,6 @@ public partial class Schedule
     public virtual Aircraft Aircraft { get; set; } = null!;
 
     public virtual Route Route { get; set; } = null!;
+
+    public virtual ICollection<Ticket> Tickets { get; } = new List<Ticket>();
 }

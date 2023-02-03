@@ -1,9 +1,12 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace App.Views.Auth;
+namespace App.Views.Admin;
 
-public class SignupView
+public class CreateUserView
 {
+    [Required]
+    public string? Role { get; set; }
+
     [Required]
     [EmailAddress]
     [MaxLength(150)]
@@ -21,6 +24,9 @@ public class SignupView
     [MaxLength(16)]
     [MinLength(8)]
     public string? Password { get; set; }
+
+    [Required]
+    public int? OfficeId { get; set; }
 
     [Required]
     public DateOnly? Birthdate { get; set; }

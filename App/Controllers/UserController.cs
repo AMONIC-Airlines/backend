@@ -45,7 +45,7 @@ public class UserController : ControllerBase
         );
     }
 
-    [HttpPost]
+    [HttpPut]
     public async Task<ActionResult<UserView>> HandleUpdateUser([FromBody] UpdateView data)
     {
         var user = await _userService.GetUser(GetId());

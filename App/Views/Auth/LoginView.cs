@@ -5,7 +5,7 @@ namespace App.Views.Auth;
 public class LoginView
 {
     [Required]
-    [RegularExpression(@"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")]
+    [EmailAddress]
     [MaxLength(150)]
     public string? Email { get; set; }
 

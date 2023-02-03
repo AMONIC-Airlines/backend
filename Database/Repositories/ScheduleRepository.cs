@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Database.Repositories;
 
-public class ScheduleRepository
+public class ScheduleRepository : IScheduleRepository
 {
     private readonly ApplicationContext _db;
 

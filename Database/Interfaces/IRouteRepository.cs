@@ -4,5 +4,5 @@ namespace Database.Interfaces;
 
 public interface IRouteRepository : IBaseRepository<Route>
 {
-    Task<Route?> GetByDepartureAndArrivalAirportId(int departureId, int arrivalId);
+    Task<List<Route>> GetByDepartureAndArrivalAirportId(int departureId, int arrivalId);
 }

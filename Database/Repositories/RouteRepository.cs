@@ -1,6 +1,7 @@
 ﻿using Database.Models;
 using Database.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Database.Repositories;
 public class RouteRepository : IRouteRepository
@@ -49,9 +50,9 @@ public class RouteRepository : IRouteRepository
         return route;
     }
 
-    public async Task<Route?> GetByDepartureAndArrivalAirportId(int departureId, int arrivalId)
+    public async Task<List<Route>> GetByDepartureAndArrivalAirportId(int departureId, int arrivalId)
     {
-        return await _db.Routes.AsNoTracking().FirstOrDefaultAsync(x => x.DepartureAirportId == departureId && x.ArrivalAirportId == arrivalId);
+        return await _db.Routes.Where(x => x.DepartureAirportId == departureId && x.ArrivalAirportId == arrivalId).ToListAsync();
     }
 
     public async Task Save()

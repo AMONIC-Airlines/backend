@@ -1,19 +1,20 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿namespace Database.Models;
 
-namespace Database.Models;
-public class Route
+public partial class Route
 {
     public int Id { get; set; }
 
-    [Required]
     public int DepartureAirportId { get; set; }
 
-    [Required]
     public int ArrivalAirportId { get; set; }
 
-    [Required]
     public int Distance { get; set; }
 
-    [Required]
-    public TimeOnly FlightTime { get; set; }
+    public int FlightTime { get; set; }
+
+    public virtual Airport ArrivalAirport { get; set; } = null!;
+
+    public virtual Airport DepartureAirport { get; set; } = null!;
+
+    public virtual ICollection<Schedule> Schedules { get; } = new List<Schedule>();
 }

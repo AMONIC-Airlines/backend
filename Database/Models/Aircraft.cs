@@ -1,24 +1,18 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿namespace Database.Models;
 
-namespace Database.Models;
-public class Aircraft
+public partial class Aircraft
 {
     public int Id { get; set; }
 
-    [Required]
-    [MaxLength(50)]
-    public string? Name { get; set; }
+    public string Name { get; set; } = null!;
 
-    [Required]
-    [MaxLength(50)]
     public string? MakeModel { get; set; }
 
-    [Required]
     public int TotalSeats { get; set; }
 
-    [Required]
     public int EconomySeats { get; set; }
 
-    [Required]
     public int BusinessSeats { get; set; }
+
+    public virtual ICollection<Schedule> Schedules { get; } = new List<Schedule>();
 }

@@ -1,31 +1,24 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿namespace Database.Models;
 
-namespace Database.Models;
-public class Schedule
+public partial class Schedule
 {
     public int Id { get; set; }
 
-    [Required]
     public DateOnly Date { get; set; }
 
-    [Required]
     public TimeOnly Time { get; set; }
 
-    [Required]
     public int AircraftId { get; set; }
 
-    [Required]
     public int RouteId { get; set; }
 
-    [Required]
-    [MaxLength(50)]
-    public string? FlightNumber { get; set; }
-
-    [Required]
     public double EconomyPrice { get; set; }
 
-    [Required]
     public bool Confirmed { get; set; }
 
+    public string? FlightNumber { get; set; }
 
+    public virtual Aircraft Aircraft { get; set; } = null!;
+
+    public virtual Route Route { get; set; } = null!;
 }

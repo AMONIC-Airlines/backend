@@ -1,18 +1,18 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿namespace Database.Models;
 
-namespace Database.Models;
-
-public class Airport
+public partial class Airport
 {
     public int Id { get; set; }
 
-    [Required]
     public int CountryId { get; set; }
 
-    [Required]
-    public string IATACode { get; set; }
+    public string Iatacode { get; set; } = null!;
 
-    [Required]
-    [MaxLength(50)]
     public string? Name { get; set; }
+
+    public virtual Country Country { get; set; } = null!;
+
+    public virtual ICollection<Route> RouteArrivalAirports { get; } = new List<Route>();
+
+    public virtual ICollection<Route> RouteDepartureAirports { get; } = new List<Route>();
 }

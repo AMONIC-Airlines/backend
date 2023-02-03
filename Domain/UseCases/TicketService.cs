@@ -1,6 +1,8 @@
 ﻿using Domain.Logic;
 using Database.Interfaces;
 using Database.Models;
+using Database.Repositories;
+using System.Runtime.ExceptionServices;
 
 namespace Domain.UseCases; 
 
@@ -106,6 +108,35 @@ public class TicketService
         catch (Exception)
         {
             return Result.Exception<List<Ticket>>();
+        }
+    }
+
+    public async Task<Result<Ticket>> BookTicket(List<Ticket> tickets)
+    {
+        try
+        {
+            if (tickets.Count > tickets[0].Schedule.Aircraft.TotalSeats - ScheduleRepository.occupiedPlaces[tickets[0].ScheduleId])
+            {
+                return Result.Fail<Ticket>("There are not so many seats on the plane.");
+            }
+
+            ScheduleRepository.occupiedPlaces[tickets[0].ScheduleId] += tickets.Count;
+
+            tickets[0].BookingReference = BookingReferenceGeneration.GenerateBookingReference();
+            var success = await _db.Create(tickets[0]); ;
+
+            for (int i = 1; i < tickets.Count; i++)
+            {
+                tickets[i].BookingReference = BookingReferenceGeneration.GenerateBookingReference();
+
+                success = await _db.Create(tickets[i]);
+            }
+
+            return Result.Ok<Ticket>(success);
+        }
+        catch (Exception)
+        {
+            return Result.Exception<Ticket>();
         }
     }
 }

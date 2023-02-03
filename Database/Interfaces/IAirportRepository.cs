@@ -1,6 +1,6 @@
-﻿using Domain.Models;
+﻿using Database.Models;
 
-namespace Domain.IRepositories;
+namespace Database.Interfaces;
 
 public interface IAirportRepository : IBaseRepository<Airport>
 {

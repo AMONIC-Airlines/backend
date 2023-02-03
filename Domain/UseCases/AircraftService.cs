@@ -1,6 +1,6 @@
-﻿using Domain.IRepositories;
+﻿using Database.Interfaces;
 using Domain.Logic;
-using Domain.Models;
+using Database.Models;
 
 namespace Domain.UseCases;
 public class AircraftService

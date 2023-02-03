@@ -41,4 +41,37 @@ public class AirportController : ControllerBase
             }
         );
     }
+
+    [HttpGet("all")]
+    public async Task<ActionResult<AirportView>> HandleGetAll()
+    {
+        var result = await _airportService.GetAllAirports();
+
+        if (result.IsException)
+        {
+            return NotFound();
+        }
+
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+
+        var list = new List<AirportView>();
+
+        foreach (var it in result.Value!)
+        {
+            list.Add(
+                new AirportView
+                {
+                    Id = it.Id,
+                    CountryId = it.CountryId,
+                    Iatacode = it.Iatacode,
+                    Name = it.Name
+                }
+            );
+        }
+
+        return Ok(list);
+    }
 }

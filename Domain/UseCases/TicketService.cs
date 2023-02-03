@@ -2,9 +2,8 @@
 using Database.Interfaces;
 using Database.Models;
 using Database.Repositories;
-using System.Runtime.ExceptionServices;
 
-namespace Domain.UseCases; 
+namespace Domain.UseCases;
 
 public class TicketService
 {
@@ -97,11 +96,11 @@ public class TicketService
         }
     }
 
-    public async Task<Result<List<Ticket>>> GetByDate(DateOnly date)
+    public async Task<Result<List<Ticket>>> GetByUserId(int userId)
     {
         try
         {
-            var success = await _db.GetByDate(date);
+            var success = await _db.GetByUserId(userId);
 
             return Result.Ok<List<Ticket>>(success);
         }
@@ -111,11 +110,38 @@ public class TicketService
         }
     }
 
+    public async Task<Result<Ticket>> ConfirmTicket(int id)
+    {
+        try
+        {
+            var ticket = await _db.Get(id);
+
+            if (ticket is null)
+            {
+                return Result.Fail<Ticket>("Ticket doesn't exist.");
+            }
+
+            ticket!.Confirmed = true;
+
+            var success = await _db.Update(ticket);
+
+            return Result.Ok<Ticket>(success);
+        }
+        catch (Exception)
+        {
+            return Result.Exception<Ticket>();
+        }
+    }
+
     public async Task<Result<Ticket>> BookTicket(List<Ticket> tickets)
     {
         try
         {
-            if (tickets.Count > tickets[0].Schedule.Aircraft.TotalSeats - ScheduleRepository.occupiedPlaces[tickets[0].ScheduleId])
+            if (
+                tickets.Count
+                > tickets[0].Schedule.Aircraft.TotalSeats
+                    - ScheduleRepository.occupiedPlaces[tickets[0].ScheduleId]
+            )
             {
                 return Result.Fail<Ticket>("There are not so many seats on the plane.");
             }
@@ -123,7 +149,8 @@ public class TicketService
             ScheduleRepository.occupiedPlaces[tickets[0].ScheduleId] += tickets.Count;
 
             tickets[0].BookingReference = BookingReferenceGeneration.GenerateBookingReference();
-            var success = await _db.Create(tickets[0]); ;
+            var success = await _db.Create(tickets[0]);
+            ;
 
             for (int i = 1; i < tickets.Count; i++)
             {

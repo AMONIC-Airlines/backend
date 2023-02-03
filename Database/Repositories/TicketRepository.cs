@@ -2,9 +2,9 @@
 using Database.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace Database.Repositories;  
+namespace Database.Repositories;
 
-public class TicketRepository : ITicketRepository  
+public class TicketRepository : ITicketRepository
 {
     private readonly ApplicationContext _db;
 
@@ -50,9 +50,9 @@ public class TicketRepository : ITicketRepository
         return ticket;
     }
 
-    public async Task<List<Ticket>> GetByDate(DateOnly date)
+    public async Task<List<Ticket>> GetByUserId(int userId)
     {
-        return await _db.Tickets.Where(x => x.Schedule.Date == date).ToListAsync();
+        return await _db.Tickets.Where(x => x.UserId == userId).ToListAsync();
     }
 
     public async Task Save()

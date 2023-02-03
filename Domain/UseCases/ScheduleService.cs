@@ -140,19 +140,31 @@ public class ScheduleService
         }
     }
 
-    public async Task<Result<Schedule>> GetByDateAndFlightNumber(DateOnly date, string flightNumber)
+    public async Task<Result<List<Schedule>>> GetByDate(DateOnly date)
     {
         try
         {
-            var success = await _db.GetByDateAndFlightNumber(date, flightNumber);
+            var success = await _db.GetByDate(date);
 
-            return Result.Ok<Schedule>(success!);
+            return Result.Ok<List<Schedule>>(success);
         }
         catch (Exception)
         {
-            return Result.Exception<Schedule>();
+            return Result.Exception<List<Schedule>>();
         }
-
     }
 
+    public async Task<Result<List<Schedule>>> GetByFlightNumber(string flightNumber)
+    {
+        try
+        {
+            var success = await _db.GetByFlightNumber(flightNumber);
+
+            return Result.Ok<List<Schedule>>(success);
+        }
+        catch (Exception)
+        {
+            return Result.Exception<List<Schedule>>();
+        }
+    }
 }

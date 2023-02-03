@@ -50,9 +50,14 @@ public class ScheduleRepository : IScheduleRepository
         return schedule;
     }
 
-    public async Task<Schedule?> GetByDateAndFlightNumber(DateOnly date, string flightNumber)
+    public async Task<List<Schedule>> GetByDate(DateOnly date)
     {
-        return await _db.Schedules.OrderBy(x => x.Date).ThenBy(x => x.Time).ThenBy(x => x.EconomyPrice).ThenBy(x => x.Confirmed).AsNoTracking().FirstOrDefaultAsync(x => x.Date == date && x.FlightNumber == flightNumber);
+        return await _db.Schedules.Where(x => x.Date == date).OrderBy(x => x.Date).ThenBy(x => x.Time).ThenBy(x => x.EconomyPrice).ThenBy(x => x.Confirmed).ToListAsync();
+    }
+
+    public async Task<List<Schedule>> GetByFlightNumber(string flightNumber)
+    {
+        return await _db.Schedules.Where(x => x.FlightNumber == flightNumber).OrderBy(x => x.Date).ThenBy(x => x.Time).ThenBy(x => x.EconomyPrice).ThenBy(x => x.Confirmed).ToListAsync();   
     }
 
     public async Task Save()

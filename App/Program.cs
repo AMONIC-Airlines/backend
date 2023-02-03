@@ -54,6 +54,10 @@ builder.Services.AddTransient<IScheduleRepository, ScheduleRepository>();
 builder.Services.AddTransient<IRouteRepository, RouteRepository>();
 builder.Services.AddTransient<IAirportRepository, AirportRepository>();
 builder.Services.AddTransient<IAircraftRepository, AircraftRepository>();
+builder.Services.AddTransient<ICabintypeRepository, CabintypeRepository>();
+builder.Services.AddTransient<ICountryRepository, CountryRepository>();
+builder.Services.AddTransient<ITicketRepository, TicketRepository>();
+builder.Services.AddTransient<IAvailableSpaceRepository, AvailableSpaceRepository>();
 
 builder.Services.AddTransient<UserService>();
 builder.Services.AddTransient<RoleService>();
@@ -61,6 +65,9 @@ builder.Services.AddTransient<ScheduleService>();
 builder.Services.AddTransient<RouteService>();
 builder.Services.AddTransient<AirportService>();
 builder.Services.AddTransient<AircraftService>();
+builder.Services.AddTransient<CabintypeService>();
+builder.Services.AddTransient<CountryService>();
+builder.Services.AddTransient<TicketService>();
 
 builder.Services.AddControllers();
 

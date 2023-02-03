@@ -20,7 +20,7 @@ public class ScheduleRepository : IScheduleRepository
 
         await _db.AvailableSpaces.AddAsync(availableSpace);
 
-        await Save();  
+        await Save();
 
         await _db.Schedules.AddAsync(schedule);
 

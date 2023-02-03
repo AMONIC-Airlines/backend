@@ -1,11 +1,10 @@
 ﻿using Database.Models;
 using Database.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System.Xml.Linq;
 
 namespace Database.Repositories;
 
-public class AvailableSpaceRepository : IAvailableSpaceRepository   
+public class AvailableSpaceRepository : IAvailableSpaceRepository
 {
     private readonly ApplicationContext _db;
 
@@ -22,9 +21,10 @@ public class AvailableSpaceRepository : IAvailableSpaceRepository
 
         return availableSpace;
     }
+
     public async Task<List<AvailableSpace>> GetAll()
     {
-        return await _db.AvailableSpaces.ToListAsync();
+        return await _db.AvailableSpaces.AsNoTracking().ToListAsync();
     }
 
     public async Task<AvailableSpace> Update(AvailableSpace availableSpace)
@@ -42,7 +42,9 @@ public class AvailableSpaceRepository : IAvailableSpaceRepository
 
     public async Task<AvailableSpace?> GetByScheduleId(int scheduleId)
     {
-        return await _db.AvailableSpaces.FirstOrDefaultAsync(x => x.ScheduleId == scheduleId);
+        return await _db.AvailableSpaces
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.ScheduleId == scheduleId);
     }
 
     Task<AvailableSpace?> IBaseRepository<AvailableSpace>.Get(int Id)

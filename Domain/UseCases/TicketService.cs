@@ -1,20 +1,27 @@
 ﻿using Domain.Logic;
 using Database.Interfaces;
 using Database.Models;
-using Database.Repositories;
 
 namespace Domain.UseCases;
 
 public class TicketService
 {
     private ITicketRepository _db;
-
     private IAvailableSpaceRepository _dbAvailableSpace;
+    private IScheduleRepository _dbSchedule;
+    private IAircraftRepository _dbAircraft;
 
-    public TicketService(ITicketRepository db, IAvailableSpaceRepository dbAvailableSpace)
+    public TicketService(
+        ITicketRepository db,
+        IAvailableSpaceRepository dbAvailableSpace,
+        IScheduleRepository dbSchedule,
+        IAircraftRepository dbAircraft
+    )
     {
         _db = db;
         _dbAvailableSpace = dbAvailableSpace;
+        _dbSchedule = dbSchedule;
+        _dbAircraft = dbAircraft;
     }
 
     public async Task<Result<Ticket>> GetTicket(int id)
@@ -136,51 +143,86 @@ public class TicketService
         }
     }
 
-    public async Task<Result<Ticket>> BookTicket(List<Ticket> tickets)
+    public async Task<Result<List<Ticket>>> BookTicket(List<Ticket> tickets)
     {
         try
         {
-            var available = _dbAvailableSpace.GetByScheduleId(tickets[0].ScheduleId).Result;
+            var schedule = await _dbSchedule.Get(tickets[0].ScheduleId);
+
+            if (schedule is null)
+            {
+                return Result.Fail<List<Ticket>>("Schedule doesn't exist.");
+            }
+
+            var aircraft = await _dbAircraft.Get(schedule.AircraftId);
+
+            if (aircraft is null)
+            {
+                return Result.Fail<List<Ticket>>("Aircraft doesn't exist.");
+            }
+
+            var available = await _dbAvailableSpace.GetByScheduleId(tickets[0].ScheduleId);
+
+            if (available is null)
+            {
+                available = await _dbAvailableSpace.Create(
+                    new AvailableSpace { ScheduleId = tickets[0].ScheduleId }
+                );
+            }
 
             List<Ticket> result = new List<Ticket>();
 
-            if (tickets[0].CabinTypeId == 1)  // Econom 
-            {
-                int remainingEconomSeats = tickets[0].Schedule.Aircraft.EconomySeats - available!.OccipiedEconomSeats;
-
-                if (tickets.Count > remainingEconomSeats)
-                {
-                    return Result.Fail<List<Ticket>>("There are not so many Econom seats on the plane. Available: " + remainingEconomSeats);
-                }
-
-                available.OccipiedEconomSeats += tickets.Count;
-            }
-            else if (tickets[0].CabinTypeId == 2)   // Business
-            {
-                int remainingBusinessSeats = tickets[0].Schedule.Aircraft.BusinessSeats - available!.OccupiedBusinesssSeats;
-
-                if (tickets.Count > remainingBusinessSeats)
-                {
-                    return Result.Fail<List<Ticket>>("There are not so many Business seats on the plane. Available: " + remainingBusinessSeats);
-                }
-
-                available.OccupiedBusinesssSeats += tickets.Count;
-            }
-            else // FirstClass
-            {
-                int allFirstClassSeats = tickets[0].Schedule.Aircraft.TotalSeats - (tickets[0].Schedule.Aircraft.EconomySeats + tickets[0].Schedule.Aircraft.BusinessSeats);
-                int remainingFirstClassSeats = allFirstClassSeats - available!.OccupiedFirstClassSeats;
-
-                if (tickets.Count > remainingFirstClassSeats)
-                {
-                    return Result.Fail<List<Ticket>>("There are not so many First Class seats on the plane. Available: " + remainingFirstClassSeats);
-                }
-
-                available.OccupiedFirstClassSeats += tickets.Count;
-            }
-
             for (int i = 0; i < tickets.Count; i++)
             {
+                if (tickets[i].CabinTypeId == 1) // Econom
+                {
+                    int remainingEconomSeats =
+                        aircraft.EconomySeats - available!.OccipiedEconomSeats.GetValueOrDefault();
+
+                    if (tickets.Count > remainingEconomSeats)
+                    {
+                        return Result.Fail<List<Ticket>>(
+                            "There are not so many Econom seats on the plane. Available: "
+                                + remainingEconomSeats
+                        );
+                    }
+
+                    available!.OccipiedEconomSeats += tickets.Count;
+                }
+                else if (tickets[i].CabinTypeId == 2) // Business
+                {
+                    int remainingBusinessSeats =
+                        aircraft.BusinessSeats
+                        - available!.OccupiedBusinesssSeats.GetValueOrDefault();
+
+                    if (tickets.Count > remainingBusinessSeats)
+                    {
+                        return Result.Fail<List<Ticket>>(
+                            "There are not so many Business seats on the plane. Available: "
+                                + remainingBusinessSeats
+                        );
+                    }
+
+                    available.OccupiedBusinesssSeats += tickets.Count;
+                }
+                else // FirstClass
+                {
+                    int allFirstClassSeats =
+                        aircraft.TotalSeats - (aircraft.EconomySeats + aircraft.BusinessSeats);
+                    int remainingFirstClassSeats =
+                        allFirstClassSeats - available!.OccupiedFirstClassSeats.GetValueOrDefault();
+
+                    if (tickets.Count > remainingFirstClassSeats)
+                    {
+                        return Result.Fail<List<Ticket>>(
+                            "There are not so many First Class seats on the plane. Available: "
+                                + remainingFirstClassSeats
+                        );
+                    }
+
+                    available.OccupiedFirstClassSeats += tickets.Count;
+                }
+
                 tickets[i].BookingReference = BookingReferenceGeneration.GenerateBookingReference();
 
                 var success = await _db.Create(tickets[i]);

@@ -9,11 +9,8 @@ public class Result
 
     protected Result(bool success, bool isException, string error)
     {
-        if (success && error != string.Empty)
-            throw new InvalidOperationException();
-        if (!success && error == string.Empty)
-            throw new InvalidOperationException();
         Success = success;
+        IsException = isException;
         Error = error;
     }
 

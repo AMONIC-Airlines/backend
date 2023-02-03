@@ -5,5 +5,5 @@ namespace Domain.IRepositories;
 
 public interface IRouteRepository : IBaseRepository<Route>
 {
-    Task<List<Route>> GetByDepartureAirportId();
+    Task<Route?> GetByDepartureAndArrivalAirportId(int departureId, int arrivalId);
 }

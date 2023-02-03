@@ -94,4 +94,18 @@ public class RouteService
         }
     }
 
+    public async Task<Result<Route>> GetByDepartureAndArrivalAirportId(int departureId, int arrivalId)
+    {
+        try
+        {
+            var success = await _db.GetByDepartureAndArrivalAirportId(departureId, arrivalId);
+
+            return Result.Ok<Route>(success!);
+        }
+        catch (Exception) 
+        { 
+            return Result.Exception<Route>();
+        }
+    }
+
 }

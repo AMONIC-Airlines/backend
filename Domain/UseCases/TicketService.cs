@@ -179,15 +179,11 @@ public class TicketService
                 available.OccupiedFirstClassSeats += tickets.Count;
             }
 
-            tickets[0].BookingReference = BookingReferenceGeneration.GenerateBookingReference();
-            var success = await _db.Create(tickets[0]);
-            result.Add(success);
-
-            for (int i = 1; i < tickets.Count; i++)
+            for (int i = 0; i < tickets.Count; i++)
             {
                 tickets[i].BookingReference = BookingReferenceGeneration.GenerateBookingReference();
 
-                success = await _db.Create(tickets[i]);
+                var success = await _db.Create(tickets[i]);
                 result.Add(success);
             }
 

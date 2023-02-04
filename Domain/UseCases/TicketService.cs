@@ -9,9 +9,12 @@ public class TicketService
 {
     private ITicketRepository _db;
 
-    public TicketService(ITicketRepository db)
+    private IAvailableSpaceRepository _dbAvailableSpace;
+
+    public TicketService(ITicketRepository db, IAvailableSpaceRepository dbAvailableSpace)
     {
         _db = db;
+        _dbAvailableSpace = dbAvailableSpace;
     }
 
     public async Task<Result<Ticket>> GetTicket(int id)
@@ -137,29 +140,78 @@ public class TicketService
     {
         try
         {
-            if (
-                tickets.Count
-                > tickets[0].Schedule.Aircraft.TotalSeats
-                    - ScheduleRepository.occupiedPlaces[tickets[0].ScheduleId]
-            )
+            var available = _dbAvailableSpace.GetByScheduleId(tickets[0].ScheduleId).Result;
+
+            if (tickets[0].CabinTypeId == 1)  // Econom 
             {
-                return Result.Fail<Ticket>("There are not so many seats on the plane.");
+                int remainingEconomSeats = tickets[0].Schedule.Aircraft.EconomySeats - available!.OccipiedEconomSeats;
+
+                if (tickets.Count > remainingEconomSeats)
+                {
+                    return Result.Fail<Ticket>("There are not so many Econom seats on the plane. Available: " + remainingEconomSeats);
+                }
+
+                tickets[0].BookingReference = BookingReferenceGeneration.GenerateBookingReference();
+                var success = await _db.Create(tickets[0]);
+
+                for (int i = 1; i < tickets.Count; i++)
+                {
+                    tickets[i].BookingReference = BookingReferenceGeneration.GenerateBookingReference();
+
+                    success = await _db.Create(tickets[i]);
+                }
+
+                available.OccipiedEconomSeats += tickets.Count;
+
+                return Result.Ok<Ticket>(success);
             }
-
-            ScheduleRepository.occupiedPlaces[tickets[0].ScheduleId] += tickets.Count;
-
-            tickets[0].BookingReference = BookingReferenceGeneration.GenerateBookingReference();
-            var success = await _db.Create(tickets[0]);
-            ;
-
-            for (int i = 1; i < tickets.Count; i++)
+            else if (tickets[0].CabinTypeId == 1)   // Business
             {
-                tickets[i].BookingReference = BookingReferenceGeneration.GenerateBookingReference();
+                int remainingBusinessSeats = tickets[0].Schedule.Aircraft.BusinessSeats - available!.OccupiedBusinesssSeats;
 
-                success = await _db.Create(tickets[i]);
+                if (tickets.Count > remainingBusinessSeats)
+                {
+                    return Result.Fail<Ticket>("There are not so many Business seats on the plane. Available: " + remainingBusinessSeats);
+                }
+
+                tickets[0].BookingReference = BookingReferenceGeneration.GenerateBookingReference();
+                var success = await _db.Create(tickets[0]);
+
+                for (int i = 1; i < tickets.Count; i++)
+                {
+                    tickets[i].BookingReference = BookingReferenceGeneration.GenerateBookingReference();
+
+                    success = await _db.Create(tickets[i]);
+                }
+
+                available.OccupiedBusinesssSeats += tickets.Count;
+
+                return Result.Ok<Ticket>(success);
             }
+            else
+            {
+                int allFirstClassSeats = tickets[0].Schedule.Aircraft.TotalSeats - (tickets[0].Schedule.Aircraft.EconomySeats + tickets[0].Schedule.Aircraft.BusinessSeats);
+                int remainingFirstClassSeats = allFirstClassSeats - available!.OccupiedFirstClassSeats;
 
-            return Result.Ok<Ticket>(success);
+                if (tickets.Count > remainingFirstClassSeats)
+                {
+                    return Result.Fail<Ticket>("There are not so many First Class seats on the plane. Available: " + remainingFirstClassSeats);
+                }
+
+                tickets[0].BookingReference = BookingReferenceGeneration.GenerateBookingReference();
+                var success = await _db.Create(tickets[0]);
+
+                for (int i = 1; i < tickets.Count; i++)
+                {
+                    tickets[i].BookingReference = BookingReferenceGeneration.GenerateBookingReference();
+
+                    success = await _db.Create(tickets[i]);
+                }
+
+                available.OccupiedFirstClassSeats += tickets.Count;
+
+                return Result.Ok<Ticket>(success);
+            }
         }
         catch (Exception)
         {

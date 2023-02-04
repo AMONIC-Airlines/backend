@@ -165,7 +165,7 @@ public class TicketService
 
                 return Result.Ok<Ticket>(success);
             }
-            else if (tickets[0].CabinTypeId == 1)   // Business
+            else if (tickets[0].CabinTypeId == 2)   // Business
             {
                 int remainingBusinessSeats = tickets[0].Schedule.Aircraft.BusinessSeats - available!.OccupiedBusinesssSeats;
 
@@ -188,7 +188,7 @@ public class TicketService
 
                 return Result.Ok<Ticket>(success);
             }
-            else
+            else // FirstClass
             {
                 int allFirstClassSeats = tickets[0].Schedule.Aircraft.TotalSeats - (tickets[0].Schedule.Aircraft.EconomySeats + tickets[0].Schedule.Aircraft.BusinessSeats);
                 int remainingFirstClassSeats = allFirstClassSeats - available!.OccupiedFirstClassSeats;

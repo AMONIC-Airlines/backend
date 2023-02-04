@@ -142,28 +142,18 @@ public class TicketService
         {
             var available = _dbAvailableSpace.GetByScheduleId(tickets[0].ScheduleId).Result;
 
+            List<Ticket> result = new List<Ticket>();
+
             if (tickets[0].CabinTypeId == 1)  // Econom 
             {
                 int remainingEconomSeats = tickets[0].Schedule.Aircraft.EconomySeats - available!.OccipiedEconomSeats;
 
                 if (tickets.Count > remainingEconomSeats)
                 {
-                    return Result.Fail<Ticket>("There are not so many Econom seats on the plane. Available: " + remainingEconomSeats);
-                }
-
-                tickets[0].BookingReference = BookingReferenceGeneration.GenerateBookingReference();
-                var success = await _db.Create(tickets[0]);
-
-                for (int i = 1; i < tickets.Count; i++)
-                {
-                    tickets[i].BookingReference = BookingReferenceGeneration.GenerateBookingReference();
-
-                    success = await _db.Create(tickets[i]);
+                    return Result.Fail<List<Ticket>>("There are not so many Econom seats on the plane. Available: " + remainingEconomSeats);
                 }
 
                 available.OccipiedEconomSeats += tickets.Count;
-
-                return Result.Ok<Ticket>(success);
             }
             else if (tickets[0].CabinTypeId == 2)   // Business
             {
@@ -171,22 +161,10 @@ public class TicketService
 
                 if (tickets.Count > remainingBusinessSeats)
                 {
-                    return Result.Fail<Ticket>("There are not so many Business seats on the plane. Available: " + remainingBusinessSeats);
-                }
-
-                tickets[0].BookingReference = BookingReferenceGeneration.GenerateBookingReference();
-                var success = await _db.Create(tickets[0]);
-
-                for (int i = 1; i < tickets.Count; i++)
-                {
-                    tickets[i].BookingReference = BookingReferenceGeneration.GenerateBookingReference();
-
-                    success = await _db.Create(tickets[i]);
+                    return Result.Fail<List<Ticket>>("There are not so many Business seats on the plane. Available: " + remainingBusinessSeats);
                 }
 
                 available.OccupiedBusinesssSeats += tickets.Count;
-
-                return Result.Ok<Ticket>(success);
             }
             else // FirstClass
             {
@@ -195,27 +173,29 @@ public class TicketService
 
                 if (tickets.Count > remainingFirstClassSeats)
                 {
-                    return Result.Fail<Ticket>("There are not so many First Class seats on the plane. Available: " + remainingFirstClassSeats);
-                }
-
-                tickets[0].BookingReference = BookingReferenceGeneration.GenerateBookingReference();
-                var success = await _db.Create(tickets[0]);
-
-                for (int i = 1; i < tickets.Count; i++)
-                {
-                    tickets[i].BookingReference = BookingReferenceGeneration.GenerateBookingReference();
-
-                    success = await _db.Create(tickets[i]);
+                    return Result.Fail<List<Ticket>>("There are not so many First Class seats on the plane. Available: " + remainingFirstClassSeats);
                 }
 
                 available.OccupiedFirstClassSeats += tickets.Count;
-
-                return Result.Ok<Ticket>(success);
             }
+
+            tickets[0].BookingReference = BookingReferenceGeneration.GenerateBookingReference();
+            var success = await _db.Create(tickets[0]);
+            result.Add(success);
+
+            for (int i = 1; i < tickets.Count; i++)
+            {
+                tickets[i].BookingReference = BookingReferenceGeneration.GenerateBookingReference();
+
+                success = await _db.Create(tickets[i]);
+                result.Add(success);
+            }
+
+            return Result.Ok<List<Ticket>>(result);
         }
         catch (Exception)
         {
-            return Result.Exception<Ticket>();
+            return Result.Exception<List<Ticket>>();
         }
     }
 }
